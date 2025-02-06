@@ -30,8 +30,12 @@ fetch(geojsonUrl)
                 if (feature.properties) {
                     let agencyComments = feature.properties.agency_comments || "No comments available";
                     let residentDescription = feature.properties.description || "No description available";
-                    layer.bindPopup(`<strong>Agency Comments:</strong> ${agencyComments}
-                    <strong>Description:</strong> ${residentDescription}`
+                    let Title = feature.properties.title || "No title available";
+                    let Date = feature.properties.date || "No date available";
+                    let Video = feature.properties.video_link || "No video available";
+                    layer.bindPopup(`<Strong>${Title}</strong> <br> <strong>Date:</strong> ${Date} <br> <strong>Description:</strong> ${residentDescription} <br>
+                    <strong>Agency Comments:</strong> ${agencyComments} <video width="320" height="240" controls><source src ="${Video}"Your browser does not support the video tag </video>`
+                    
                     )
                     
                 }
