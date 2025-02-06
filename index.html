@@ -30,8 +30,8 @@ fetch(geojsonUrl)
                 if (feature.properties) {
                     let agencyComments = feature.properties.agency_comments || "No comments available";
                     let residentDescription = feature.properties.description || "No description available";
-                    layer.bindPopup(`<strong>Agency Comments:</strong> ${agencyComments}`);
-                    layer.bindPopup(`<strong>Description:</strong> ${residentDescription}`);
+                    layer.bindPopup(`<strong>Agency Comments:</strong> ${agencyComments}`).bindPopup('<strong>Description:</strong>' ${residentDescription});
+                    
                 }
             },
             pointToLayer: function (feature, latlng) {
