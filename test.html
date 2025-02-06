@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <style>
+        #map {position: absolute; top: 0; bottom: 0; left: 0; right: 0}
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id ="map"></div>
+    <script>
+        var map = L.map('map').setView([35.350866, -118.627982], 10)
+        L.tileLayer('https://api.maptiler.com/maps/satellite/{z}/{x}/{y}.jpg?key=jeKWuSXoJcz5RtIFAEXk', {
+            attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
+        }).addTo(map);
+      // GeoJSON URL (Fulcrum data)
+      var geojsonUrl = 'https://web.fulcrumapp.com/shares/86a59211e81a20dc.geojson';
+
+// Fetch and load GeoJSON
+fetch(geojsonUrl)
+    .then(response => response.json())
+    .then(data => {
+        // Create GeoJSON layer with markers and popups
+        var geoJsonLayer = L.geoJSON(data, {
+            onEachFeature: function (feature, layer) {
+                if (feature.properties) {
+                    let agencyComments = feature.properties.agency_comments || "No comments available";
+                    layer.bindPopup(`<strong>Agency Comments:</strong> ${agencyComments}`);
+                }
+            },
+            pointToLayer: function (feature, latlng) {
+                return L.marker(latlng); // Convert points to markers
+            }
+        }).addTo(map);
+
+        // Fit map to the bounds of the GeoJSON data
+        map.fitBounds(geoJsonLayer.getBounds());
+    })
+    .catch(error => console.error('Error loading GeoJSON:', error));
+    </script>
+</body>
+</html>
